@@ -61,14 +61,15 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        url = search_download_youtube_video(message.text)
+        self.send_text(url[0]['url'])
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = Bot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
-
 
