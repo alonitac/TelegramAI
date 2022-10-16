@@ -65,6 +65,7 @@ instance/
 
 # Scrapy stuff:
 .scrapy
+.telegramToken
 
 # Sphinx documentation
 docs/_build/

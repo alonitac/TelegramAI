@@ -31,6 +31,9 @@ class Bot:
     def send_text_with_quote(self, text, message_id):
         self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
 
+    def send_video(self, video_path):
+        self.bot.send_video(self.current_msg.chat.id, video_path)
+
     def is_current_msg_photo(self):
         return self.current_msg['content_type'] != 'photo'
 
@@ -41,10 +44,17 @@ class Bot:
         :return:
         """
         if self.current_msg['content_type'] != 'photo':
-            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+            raise RuntimeError(
+                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
+        if self.is_current_msg_photo():
+            with open(f'photos/{self.current_msg.photo[quality].file_id}.jpg', 'wb') as f:
+                f.write(data)
+        else:
+            raise RuntimeError(
+                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         # TODO save `data` as a photo in `file_info.file_path` path
 
@@ -61,14 +71,15 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        if message.text != 'Don\'t download me please':
+            x = search_download_youtube_video(message.text)
+            self.send_text(x[0].get("url"))
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = QuoteBot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
-
-
