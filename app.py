@@ -35,7 +35,7 @@ class Bot:
         self.bot.send_video(self.current_msg.chat.id, video_path)
 
     def is_current_msg_photo(self):
-        return self.current_msg['content_type'] != 'photo'
+        return self.current_msg.content_type == 'photo'
 
     def download_user_photo(self, quality=0):
         """
@@ -43,9 +43,8 @@ class Bot:
         :param quality: integer representing the file quality. Allowed values are [0, 1, 2, 3]
         :return:
         """
-        if self.current_msg['content_type'] != 'photo':
-            raise RuntimeError(
-                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+        if self.current_msg.content_type != 'photo':
+            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
@@ -83,3 +82,5 @@ if __name__ == '__main__':
 
     my_bot = YoutubeBot(_token)
     my_bot.start()
+
+
