@@ -1,6 +1,7 @@
 import telebot
 from utils import search_download_youtube_video
 from loguru import logger
+import os
 
 
 class Bot:
@@ -31,8 +32,7 @@ class Bot:
     def send_text_with_quote(self, text, message_id):
         self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
 
-    def send_video(self, video_path):
-        self.bot.send_video(self.current_msg.chat.id, video_path)
+
 
     def is_current_msg_photo(self):
         return self.current_msg.content_type == 'photo'
@@ -71,9 +71,12 @@ class QuoteBot(Bot):
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
-        if message.text != 'Don\'t download me please':
-            x = search_download_youtube_video(message.text)
-            self.send_text(x[0].get("url"))
+        youtube = search_download_youtube_video(message.text)
+        self.send_video(message, os.path.join('./', youtube[0].get("filename")))
+
+    def send_video(self, message, path):
+        video = open(path, 'rb')
+        self.bot.send_video(message.chat.id, video)
 
 
 if __name__ == '__main__':
