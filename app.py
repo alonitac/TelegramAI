@@ -77,7 +77,7 @@ class QuoteBot(Bot):
 class YoutubeBot(Bot):
     def handle_message(self, message):
         if self.is_current_msg_photo():
-            self.download_user_photo(quality=3)
+            self.download_user_photo()
         else:
             youtube = search_download_youtube_video(message.text)
             self.send_video(message, os.path.join('./', youtube[0].get("filename")))
