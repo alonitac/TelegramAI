@@ -48,12 +48,17 @@ class Bot:
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
-        if self.is_current_msg_photo():
-            with open(f'photos/{self.current_msg.photo[quality].file_id}.jpg', 'wb') as f:
-                f.write(data)
-        else:
-            raise RuntimeError(
-                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+        folder_name = 'photos'
+
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
+
+        with open(file_info.file_path, 'wb') as f:
+            f.write(data)
+            f.flush()
+
+        self.send_text(f'Photo saved to {folder_name}/{file_info.file_path}')
+        return file_info
 
         # TODO save `data` as a photo in `file_info.file_path` path
 
@@ -71,8 +76,12 @@ class QuoteBot(Bot):
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
-        youtube = search_download_youtube_video(message.text)
-        self.send_video(message, os.path.join('./', youtube[0].get("filename")))
+        if self.is_current_msg_photo():
+            self.download_user_photo(quality=3)
+        else:
+            youtube = search_download_youtube_video(message.text)
+            self.send_video(message, os.path.join('./', youtube[0].get("filename")))
+        self.send_text('thank you, send me another photo or a video name')
 
     def send_video(self, message, path):
         video = open(path, 'rb')
