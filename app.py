@@ -34,6 +34,12 @@ class Bot:
     def is_current_msg_photo(self):
         return self.current_msg.content_type == 'photo'
 
+    def handle_message(self, message):
+        """Bot Main message handler"""
+        logger.info(f'Incoming message: {message}')
+        self.send_text(f'Your original message: {message.text}')
+
+
     def download_user_photo(self, quality=0):
         """
         Downloads photos sent to the Bot to `photos` directory (should be existed)
@@ -45,13 +51,8 @@ class Bot:
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
-
-        # TODO save `data` as a photo in `file_info.file_path` path
-
-    def handle_message(self, message):
-        """Bot Main message handler"""
-        logger.info(f'Incoming message: {message}')
-        self.send_text(f'Your original message: {message.text}')
+        with open(data) as x:
+            x.write(data)
 
 
 class QuoteBot(Bot):
@@ -61,7 +62,14 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, name, num):
+        """Bot Main message handler"""
+        video_name = name
+        num_results = num
+        if self.is_current_msg_photo():
+            self.download_user_photo()
+        path_to_vid = search_download_youtube_video(video_name, num_results=1)
+        self.send_text(path_to_vid)
 
 
 if __name__ == '__main__':
@@ -70,5 +78,7 @@ if __name__ == '__main__':
 
     my_bot = Bot(_token)
     my_bot.start()
+
+
 
 
