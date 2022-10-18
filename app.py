@@ -1,6 +1,7 @@
 import telebot
 from utils import search_download_youtube_video
 from loguru import logger
+import os
 
 
 class Bot:
@@ -31,6 +32,8 @@ class Bot:
     def send_text_with_quote(self, text, message_id):
         self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
 
+
+
     def is_current_msg_photo(self):
         return self.current_msg.content_type == 'photo'
 
@@ -45,6 +48,17 @@ class Bot:
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
+        folder_name = 'photos'
+
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
+
+        with open(file_info.file_path, 'wb') as f:
+            f.write(data)
+            f.flush()
+
+        self.send_text(f'Photo saved to {folder_name}/{file_info.file_path}')
+        return file_info
 
         # TODO save `data` as a photo in `file_info.file_path` path
 
@@ -61,14 +75,24 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        if self.is_current_msg_photo():
+            self.download_user_photo()
+        else:
+            youtube = search_download_youtube_video(message.text)
+            self.send_video(message, os.path.join('./', youtube[0].get("filename")))
+        self.send_text('thank you, send me another photo or a video name')
+
+    def send_video(self, message, path):
+        video = open(path, 'rb')
+        self.bot.send_video(message.chat.id, video)
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = Bot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
 
 
