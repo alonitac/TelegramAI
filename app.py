@@ -1,6 +1,7 @@
 import telebot
 from utils import search_download_youtube_video
 from loguru import logger
+import os
 
 
 class Bot:
@@ -47,6 +48,11 @@ class Bot:
         data = self.bot.download_file(file_info.file_path)
 
         # TODO save `data` as a photo in `file_info.file_path` path
+        folder_name = 'photos'
+        if not os.path.exists(folder_name):
+            os.mkdir(folder_name)
+        with open(file_info.file_path ,'wb') as p:
+            p.write(data)
 
     def handle_message(self, message):
         """Bot Main message handler"""
@@ -62,9 +68,12 @@ class QuoteBot(Bot):
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
-        url = search_download_youtube_video(message.text)
-        self.send_text(url[0]['url'])
 
+        if self.is_current_msg_photo():
+            self.download_user_photo()
+        else:
+            url = search_download_youtube_video(message.text)
+            self.send_text(url[0]['url'])
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
