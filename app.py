@@ -1,4 +1,5 @@
 import telebot
+
 from utils import search_download_youtube_video
 from loguru import logger
 
@@ -41,7 +42,8 @@ class Bot:
         :return:
         """
         if self.current_msg.content_type != 'photo':
-            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+            raise RuntimeError(
+                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
@@ -61,14 +63,25 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        self.bot.send_message(self.current_msg.chat.id, "in order to start type start")
+        if message.text == 'start':
+            self.bot.send_message(self.current_msg.chat.id, "which song would you like me to search for you")
+
+        search_download_youtube_video(self.current_msg)
+        self.send_text("your song has been downloaded")
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
-
-    my_bot = Bot(_token)
-    my_bot.start()
-
-
+    which_bot = input("which bot do you want: ")
+    if which_bot == "youtube":
+        my_bot = YoutubeBot(_token)
+        my_bot.start()
+    elif which_bot == "quotebot":
+        my_bot = QuoteBot(_token)
+        QuoteBot.start(my_bot)
+    elif which_bot == "bot":
+        my_bot = Bot(_token)
+        Bot.start(my_bot)
