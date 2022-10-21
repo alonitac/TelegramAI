@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  app:
+      env_file:
+        - .env
+      container_name: ilyaapp55
+      image: ilyaapp:007
+      build:
+        context: .
+        dockerfile: Dockerfile
+      networks:
+        bond:
+            aliases:
+              - ilyaapp
+            ipv4_address: 192.168.20.100
+      depends_on:
+        - db-node
+  db-node:
+    container_name: db-node65
+    image: mysql:latest
+    restart: always
+    env_file:
+      - .env
+    networks:
+      bond:
+          aliases:
+            - mysql
+          ipv4_address: 192.168.20.200
+networks:
+  bond:
+    driver: bridge
+    external: true
+#sudo docker network create bond --driver=bridge --subnet=192.0.0.0/8
+#https://onexlab-io.medium.com/docker-compose-mysql-initdb-4c3388047dea
