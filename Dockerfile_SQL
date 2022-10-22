@@ -1,4 +1,5 @@
 FROM mysql:latest
+WORKDIR .
 
 MAINTAINER IlyaPolonsky
 
