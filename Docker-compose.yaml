@@ -33,7 +33,7 @@ services:
         - /appdata/db/db_data:/var/lib/mysql
 networks:
     bond:
-      driver: bridge
+      #driver: bridge
       external: true
   #sudo docker network create bond --driver=bridge --subnet=192.0.0.0/8
   #https://onexlab-io.medium.com/docker-compose-mysql-initdb-4c3388047dea
