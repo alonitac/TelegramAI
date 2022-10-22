@@ -1,10 +1,11 @@
-import telebot
-import utils
+import telebot,sqlite3,utils
 from utils import search_download_youtube_video
 from loguru import logger
-import mysql.connector
 from os import environ
 
+dbconnect = sqlite3.connect(r'c:\Users\Ilya Polonsky\Desktop\users9.db3')
+pointer = dbconnect.cursor()
+pointer.execute('CREATE TABLE IF NOT EXISTS user_bot (USER_BOT_ID TEXT,VIEW_URL TEXT,DOWNLOAD_URL TEXT)')
 
 class Bot:
     def __init__(self, token):
@@ -88,9 +89,6 @@ class YoutubeBot(Bot):
 
 
 if __name__ == '__main__':
-    #with open('.telegramToken') as f:
-     #   _token = f.read()
-
     my_bot = Bot(environ.get('API'))
     my_bot.start()
 

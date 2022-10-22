@@ -1,22 +1,22 @@
 version: '2.0'
 services:
-    db-node:
-      container_name: db-node65
-      image: database:001
-      build:
-        context: .
-        dockerfile: Dockerfile_SQL
+    #db-node:
+    #  container_name: db-node65
+    #  image: database:001
+    #  build:
+    #    context: .
+    #    dockerfile: Dockerfile_SQL
       #restart: always
-      env_file:
-        - .env
-      networks:
-        bond:
-            aliases:
-              - mysql_db
-            ipv4_address: 192.168.20.200
-      volumes:
+    #  env_file:
+    #    - .env
+    #  networks:
+    #    bond:
+    #        aliases:
+    #          - mysql_db
+    #        ipv4_address: 192.168.20.200
+    #  volumes:
         #- /appdata/db/init:/docker-entrypoint-initdb.d
-        - /appdata/db/db_data:/var/lib/mysql
+     #   - /appdata/db/db_data:/var/lib/mysql
     app:
       env_file:
         - .env
@@ -30,10 +30,11 @@ services:
           aliases:
             - ilyaapp
           ipv4_address: 192.168.20.100
-      depends_on:
-        - db-node
+      #depends_on:
+      #  - db-node
       volumes:
         - /appdata/img:/img
+        - /appdata/db/db_data:/db_data
 networks:
     bond:
       #driver: bridge
