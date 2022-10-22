@@ -3,4 +3,4 @@ WORKDIR .
 COPY . .
 #ENV MAIN_APP=app.py
 RUN pip3 install -r requirements.txt
-CMD ["python3", "new.py > /img/log.txt"]
+CMD ["python3", "new.py"]
