@@ -66,7 +66,7 @@ class Bot:
             #query = f"SELECT link_download FROM {self.dbname} WHERE search_phrase = 'strangeshithappened'"
             #self.mycursor.execute(query)
             self.send_text(f'Your link: '
-                           f'{utils.search_download_youtube_video(self.mycursor.fetchone())}')
+                           f'{utils.search_download_youtube_video(message.text)}')
             if '$please don\'t quote' in message.text:
                 self.send_text(f'Your link: '
                                f'{utils.search_download_youtube_video(message.text, user_id=message.from_user.id)}')
