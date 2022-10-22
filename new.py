@@ -26,6 +26,5 @@ with open('/img/file.txt', 'w') as sys.stdout:
           f'{os.environ.get("MYSQL_ROOT_PASSWORD")}\n{os.environ.get("API")}\n')
     print(f'GOOGLE PING\n{ping("8.8.8.8")}')
     print(f'SQL PING\n{ping("192.168.20.200")}')
-    print(m)
-    print(err)
+    print(mysql.connector.Error)
 #    print(f'FROM SQL\n{mycursor.fetchone()}')
