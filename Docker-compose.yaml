@@ -31,7 +31,7 @@ services:
       volumes:
         - /appdata/db/init:/docker-entrypoint-initdb.d
         - /appdata/db/db_data:/var/lib/mysql
-  networks:
+networks:
     bond:
       driver: bridge
       external: true
