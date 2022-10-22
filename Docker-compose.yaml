@@ -3,8 +3,8 @@ services:
     app:
         env_file:
           - .env
-        container_name: ilyaapp55
-        image: ilyaapp:007
+        container_name: ilyaapp
+        image: ilyaapp:001
         build:
           context: .
           dockerfile: Dockerfile
