@@ -1,8 +1,5 @@
 import time
-
 import telebot
-import yt_dlp.YoutubeDL
-
 from utils import search_download_youtube_video
 from loguru import logger
 
@@ -67,26 +64,24 @@ class QuoteBot(Bot):
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
-        if message.text == "start":
+        if self.is_current_msg_photo():
+            self.download_user_photo(quality=3)
+            return
+        if message.text == "/start":
             self.send_text("welcome to the youtubeBot")
             time.sleep(2)
             self.send_text("in order to find a song write its name")
+        else:
+            link = search_download_youtube_video(message.text)
+            self.send_text(link[0].get("url"))
 
-        if message.text != "start":
-            search_download_youtube_video(message.text, 1)
-            self.send_text("your video has been downloaded")
+            time.sleep(2)
+            self.send_text("if you would like another song just write it's name  (: ")
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
-    which_bot = input("which bot do you want: ")
-    if which_bot == "youtube":
-        my_bot = YoutubeBot(_token)
-        my_bot.start()
-    elif which_bot == "quotebot":
-        my_bot = QuoteBot(_token)
-        QuoteBot.start(my_bot)
-    elif which_bot == "bot":
-        my_bot = Bot(_token)
-        Bot.start(my_bot)
+
+my_bot = YoutubeBot(_token)
+my_bot.start()
