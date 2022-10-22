@@ -24,6 +24,8 @@ class Bot:
 
     def start(self):
         """Start polling msgs from users, this function never returns"""
+        print(environ.get('MYSQL_IP'),environ.get('MYSQL_ROOT_USER'),
+           environ.get('MYSQL_ROOT_PASSWORD'), environ.get('API'))
         logger.info(f'{self.__class__.__name__} is up and listening to new messages....')
         logger.info('Telegram Bot information')
         logger.info(self.bot.get_me())
@@ -89,7 +91,7 @@ if __name__ == '__main__':
     #with open('.telegramToken') as f:
      #   _token = f.read()
 
-    my_bot = Bot('5683443990:AAHvz0aQwW8ZI92KqIEnxw-6hh2jxy_6MDw')
+    my_bot = Bot(environ.get('API'))
     my_bot.start()
 
 
