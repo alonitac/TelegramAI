@@ -3,9 +3,9 @@ from utils import search_download_youtube_video
 from loguru import logger
 from os import environ
 
-dbconnect = sqlite3.connect(r'c:\Users\Ilya Polonsky\Desktop\users9.db3')
-pointer = dbconnect.cursor()
-pointer.execute('CREATE TABLE IF NOT EXISTS user_bot (USER_BOT_ID TEXT,VIEW_URL TEXT,DOWNLOAD_URL TEXT)')
+#dbconnect = sqlite3.connect(r'c:\Users\Ilya Polonsky\Desktop\users9.db3')
+#pointer = dbconnect.cursor()
+#pointer.execute('CREATE TABLE IF NOT EXISTS user_bot (USER_BOT_ID TEXT,VIEW_URL TEXT,DOWNLOAD_URL TEXT)')
 
 class Bot:
     def __init__(self, token):
@@ -74,6 +74,8 @@ class Bot:
                 self.send_text_with_quote(utils.search_download_youtube_video(message.text,
                                                                               user_id=message.from_user.id),
                                           message_id=message.message_id)
+            self.send_text(f'type: '
+                           f'{self.current_msg.content_type}')
 
 
 
