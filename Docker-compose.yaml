@@ -12,7 +12,7 @@ services:
               - mysql
             ipv4_address: 192.168.20.200
       volumes:
-        - /appdata/db/init:/docker-entrypoint-initdb.d
+        #- /appdata/db/init:/docker-entrypoint-initdb.d
         - /appdata/db/db_data:/var/lib/mysql
     app:
       env_file:
