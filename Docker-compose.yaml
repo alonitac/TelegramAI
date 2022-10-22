@@ -20,7 +20,7 @@ services:
   db-node:
     container_name: db-node65
     image: mysql:latest
-    restart: always
+    #restart: always
     env_file:
       - .env
     networks:
