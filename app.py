@@ -13,9 +13,6 @@ class Bot:
         self.bot.set_update_listener(self._bot_internal_handler)
         self.current_msg = None
         self.dbname = environ.get('DB_NAME')
-        #self.mydb = mysql.connector.connect(host=environ.get('MYSQL_IP'),user=environ.get('MYSQL_ROOT_USER'),
-        #   password=environ.get('MYSQL_ROOT_PASSWORD'))
-        #self.mycursor = self.mydb.cursor()
 
     def _bot_internal_handler(self, messages):
         """Bot internal messages handler"""
@@ -30,6 +27,7 @@ class Bot:
         logger.info(f'{self.__class__.__name__} is up and listening to new messages....')
         logger.info('Telegram Bot information')
         logger.info(self.bot.get_me())
+        self.send_text('Hi,\nI am a bot that part of INT Devops 2022')
         self.bot.infinity_polling()
 
     def send_text(self, text):
