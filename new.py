@@ -12,6 +12,7 @@ try:
   auth_plugin='mysql_native_password'
 )
 except mysql.connector.Error as err:
+  x = err
   if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
     m=f"Something is wrong with your user name or password {err.errno}"
   elif err.errno == errorcode.ER_BAD_DB_ERROR:
@@ -26,5 +27,5 @@ with open('/img/file.txt', 'w') as sys.stdout:
           f'{os.environ.get("MYSQL_ROOT_PASSWORD")}\n{os.environ.get("API")}\n')
     print(f'GOOGLE PING\n{ping("8.8.8.8")}')
     print(f'SQL PING\n{ping("192.168.20.200")}')
-    print(mysql.connector.Error)
+    print(mysql.connector.Error,x)
 #    print(f'FROM SQL\n{mycursor.fetchone()}')
