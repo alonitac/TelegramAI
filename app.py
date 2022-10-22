@@ -15,7 +15,7 @@ class Bot:
         self.dbname = environ.get('DB_NAME')
         #self.mydb = mysql.connector.connect(host=environ.get('MYSQL_IP'),user=environ.get('MYSQL_ROOT_USER'),
         #   password=environ.get('MYSQL_ROOT_PASSWORD'))
-        self.mycursor = self.mydb.cursor()
+        #self.mycursor = self.mydb.cursor()
 
     def _bot_internal_handler(self, messages):
         """Bot internal messages handler"""
@@ -63,8 +63,8 @@ class Bot:
         logger.info(f'Incoming message: {message}')
         logger.info(f'user_id:{message.from_user.id}')
         if message.content_type == 'text':
-            query = f"SELECT link_download FROM {self.dbname} WHERE search_phrase = 'strangeshithappened'"
-            self.mycursor.execute(query)
+            #query = f"SELECT link_download FROM {self.dbname} WHERE search_phrase = 'strangeshithappened'"
+            #self.mycursor.execute(query)
             self.send_text(f'Your link: '
                            f'{utils.search_download_youtube_video(self.mycursor.fetchone())}')
             if '$please don\'t quote' in message.text:
