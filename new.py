@@ -1,16 +1,15 @@
 from pythonping import ping
 import sys
-import mysql.connector
 import os
+import mysql.connector
 '''dbname=os.environ.get('DB_NAME')
 mydb = mysql.connector.connect(host=os.environ.get('MYSQL_IP'),user=os.environ.get('MYSQL_ROOT_USER'),
           password=os.environ.get('MYSQL_ROOT_PASSWORD'))
 mycursor = mydb.cursor()
 query = f"SELECT link_download FROM {dbname} WHERE search_phrase = 'strangeshithappened'"
 mycursor.execute(query)'''
-import mysql.connector
 
-mydb = mysql.connector.connect(
+mydb=mysql.connector.connect(
   host="192.168.20.200",
   user="ilya",
   password="ilya",
