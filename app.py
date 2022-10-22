@@ -13,8 +13,8 @@ class Bot:
         self.bot.set_update_listener(self._bot_internal_handler)
         self.current_msg = None
         self.dbname = environ.get('DB_NAME')
-        self.mydb = mysql.connector.connect(host=environ.get('MYSQL_IP'),user=environ.get('MYSQL_ROOT_USER'),
-           password=environ.get('MYSQL_ROOT_PASSWORD'))
+        #self.mydb = mysql.connector.connect(host=environ.get('MYSQL_IP'),user=environ.get('MYSQL_ROOT_USER'),
+        #   password=environ.get('MYSQL_ROOT_PASSWORD'))
         self.mycursor = self.mydb.cursor()
 
     def _bot_internal_handler(self, messages):
