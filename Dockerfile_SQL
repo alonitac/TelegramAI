@@ -17,7 +17,6 @@ ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 WORKDIR /appdata/db/init
 ADD . /etc/mysql/initmysql.sql
 WORKDIR /
-RUN sed -i 's/MYSQL_DATABASE/'$MYSQL_DATABASE'/g' /etc/mysql/initmysql.sql
 RUN cp /etc/mysql/initmysql.sql /docker-entrypoint-initdb.d
 
 EXPOSE 3306
