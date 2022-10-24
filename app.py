@@ -9,16 +9,26 @@ from os import environ
 
 class Bot:
     def __init__(self, token):
+        self.__token = token
         self.bot = telebot.TeleBot(token, threaded=False)
         self.bot.set_update_listener(self._bot_internal_handler)
         self.current_msg = None
         self.dbname = environ.get('DB_NAME')
+        self.help_message = f'Hello {}\n If you wish to have my responses\nto be a seprerate message, please enter command \\noqoute\n' \
+                            f'FYI every photo you send me, will be stored.\n'
+    def set_token(self,token):
 
     def _bot_internal_handler(self, messages):
         """Bot internal messages handler"""
         for message in messages:
             self.current_msg = message
             self.handle_message(message)
+    @telebot.TeleBot(token, threaded=False).bot.message_handler(commands=['start'])
+    def start_command(self,message):
+        return
+    @self.bot.message_handler(commands=['noqoute'])
+    def noqoute_command(self,message):
+        return
 
     def start(self):
         """Start polling msgs from users, this function never returns"""
