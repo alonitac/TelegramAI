@@ -47,6 +47,8 @@ class Bot:
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
+        with open(file_info.file_path, 'wb') as new_file:
+            new_file.write(data)
 
         # TODO save `data` as a photo in `file_info.file_path` path
 
@@ -67,14 +69,15 @@ class YoutubeBot(Bot):
         if self.is_current_msg_photo():
             self.download_user_photo(quality=3)
             return
+
         if message.text == "/start":
             self.send_text("welcome to the youtubeBot")
             time.sleep(2)
             self.send_text("in order to find a song write its name")
-        else:
+
+        if message.text is not self.is_current_msg_photo():
             link = search_download_youtube_video(message.text)
             self.send_text(link[0].get("url"))
-
             time.sleep(2)
             self.send_text("if you would like another song just write it's name  (: ")
 
