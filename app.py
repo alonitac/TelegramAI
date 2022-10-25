@@ -1,3 +1,4 @@
+import time
 import telebot
 from utils import search_download_youtube_video
 from loguru import logger
@@ -41,10 +42,13 @@ class Bot:
         :return:
         """
         if self.current_msg.content_type != 'photo':
-            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+            raise RuntimeError(
+                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
+        with open(file_info.file_path, 'wb') as new_file:
+            new_file.write(data)
 
         # TODO save `data` as a photo in `file_info.file_path` path
 
@@ -61,14 +65,26 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        if self.is_current_msg_photo():
+            self.download_user_photo(quality=3)
+            return
+
+        if message.text == "/start":
+            self.send_text("welcome to the youtubeBot")
+            time.sleep(2)
+            self.send_text("in order to find a song write its name")
+
+        if message.text is not self.is_current_msg_photo():
+            link = search_download_youtube_video(message.text)
+            self.send_text(link[0].get("url"))
+            time.sleep(2)
+            self.send_text("if you would like another song just write it's name  (: ")
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = Bot(_token)
-    my_bot.start()
-
-
+my_bot = YoutubeBot(_token)
+my_bot.start()
