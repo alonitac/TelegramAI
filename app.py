@@ -6,40 +6,7 @@ from os import environ
 #dbconnect = sqlite3.connect(r'c:\Users\Ilya Polonsky\Desktop\users9.db3')
 #pointer = dbconnect.cursor()
 #pointer.execute('CREATE TABLE IF NOT EXISTS user_bot (USER_BOT_ID TEXT,VIEW_URL TEXT,DOWNLOAD_URL TEXT)')
-
-class Bot:
-    def __init__(self, token):
-        self.bot = telebot.TeleBot(token, threaded=False)
-        self.bot.set_update_listener(self._bot_internal_handler)
-        self.current_msg = None
-        self.dbname = environ.get('DB_NAME')
-
-    def _bot_internal_handler(self, messages):
-        """Bot internal messages handler"""
-        for message in messages:
-            self.current_msg = message
-            self.handle_message(message)
-
-    def start(self):
-        """Start polling msgs from users, this function never returns"""
-        print(environ.get('MYSQL_IP'),environ.get('MYSQL_ROOT_USER'),
-           environ.get('MYSQL_ROOT_PASSWORD'), environ.get('API'))
-        logger.info(f'{self.__class__.__name__} is up and listening to new messages....')
-        logger.info('Telegram Bot information')
-        logger.info(self.bot.get_me())
-        self.send_text('Hi,\nI am a bot that part of INT Devops 2022')
-        self.bot.infinity_polling()
-
-    def send_text(self, text):
-        self.bot.send_message(self.current_msg.chat.id, text)
-
-    def send_text_with_quote(self, text, message_id):
-        '''self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)'''
-        self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
-
-    def is_current_msg_photo(self):
-        return self.current_msg.content_type == 'photo'
-
+'''
     def download_user_photo(self, quality=0):
         """
         Downloads photos sent to the Bot to `photos` directory (should be existed)
@@ -52,44 +19,19 @@ class Bot:
 		newFile.download(path)
 		qr = account_by_qr(path)
         """
-        if self.current_msg.content_type != 'photo':
-            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
-        # TODO save `data` as a photo in `file_info.file_path` path
-
-    def handle_message(self, message):
-        """Bot Main message handler"""
-        logger.info(f'Incoming message: {message}')
-        logger.info(f'user_id:{message.from_user.id}')
-        if message.content_type == 'text':
-            #query = f"SELECT link_download FROM {self.dbname} WHERE search_phrase = 'strangeshithappened'"
-            #self.mycursor.execute(query)
-            self.send_text(f'Your link: '
-                           f'{utils.search_download_youtube_video(message.text)}')
-            if '$please don\'t quote' in message.text:
-                self.send_text(f'Your link: '
-                               f'{utils.search_download_youtube_video(message.text, user_id=message.from_user.id)}')
-            else:
-                self.send_text_with_quote(utils.search_download_youtube_video(message.text,
-                                                                              user_id=message.from_user.id),
-                                          message_id=message.message_id)
-            self.send_text(f'type: '
-                           f'{self.current_msg.content_type}')
-
-
-
-class QuoteBot(Bot):
-    '''def handle_message(self, message):
-        if message.text != 'Don\'t quote me please':
-            self.send_text_with_quote(utils.search_download_youtube_video(message.text, user_id=message.from_user.id),
-                                      message_id=message.message_id)
+'''
+'''
+text, audio, document, photo, sticker, video, video_note, voice, location, contact, new_chat_members, left_chat_member,
+new_chat_title, new_chat_photo, delete_chat_photo, group_chat_created, supergroup_chat_created, channel_chat_created,
+migrate_to_chat_id, migrate_from_chat_id, pinned_message, web_app_data
 '''
 
-class YoutubeBot(Bot):
-    pass
-
+bot = telebot.TeleBot('5683443990:AAHvz0aQwW8ZI92KqIEnxw-6hh2jxy_6MDw') # creating a instance
+@bot.message_handler(content_types=['audio','voice','location'])
+def not_relevant(message):
+    bot.reply_to(message,'Not Relevant')
+def main():
+    bot.polling() # looking for message
 
 if __name__ == '__main__':
-    my_bot = Bot(environ.get('API'))
-    my_bot.start()
-
-
+    main()
