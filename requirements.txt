@@ -1,7 +1,3 @@
 pyTelegramBotAPI
 yt-dlp>=2022.6.29
 loguru
-sqlite3
-os
-datetime
-uuid
