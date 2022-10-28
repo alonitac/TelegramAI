@@ -1,9 +1,9 @@
 import telebot,sqlite3,utils,os,uuid,datetime
 from loguru import logger
 api=os.environ.get('API')
-img_path=('/appdata/img')
+img_path=('/img')
 bot = telebot.TeleBot(api)
-sql_path=('/appdata/db/db_data/bot_sql.db3')
+sql_path=('/db_data/bot_sql.db3')
 logger.info(f'{__name__} Bot instance created')
 dbconnect = sqlite3.connect(sql_path,check_same_thread=False)
 logger.info(f'{__name__} Database connected')
