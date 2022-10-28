@@ -1,0 +1,21 @@
+version: '2.0'
+services:
+    app:
+      env_file:
+        - .env
+      container_name: ilya_app
+      image: ilya_app:001
+      build:
+        context: .
+        dockerfile: Dockerfile
+      networks:
+        bond:
+          aliases:
+            - ilyaapp
+          ipv4_address: 192.168.20.100
+      volumes:
+        - /appdata/img:/img
+        - /appdata/db/db_data:/db_data
+networks:
+    bond:
+      external: true

@@ -1,24 +1,22 @@
-import time
 from yt_dlp import YoutubeDL
+from loguru import logger
 
 
-def search_download_youtube_video(video_name, num_results=1):
-    """
-    This function downloads the first num_results search results from Youtube
-    :param video_name: string of the video name
-    :param num_results: integer representing how many videos to download
-    :return: list of paths to your downloaded video files
-    """
-    results = []
+def search_download_youtube_video(video_name, num_results=1, download=False):
+    '''
+    Function that fetches the urls of videos from youtube
+    :param video_name: Search text from user
+    :param num_results: number of results to show, default 1
+    :param download: boolean download --> if download as a file or not
+    :return: dictionary
+    '''
     with YoutubeDL() as ydl:
-        videos = ydl.extract_info(f"ytsearch{num_results}:{video_name}", download=True)['entries']
-
-        for video in videos:
-            results.append({
-                'filename': ydl.prepare_filename(video),
-                'video_id': video['id'],
-                'title': video['title'],
-                'url': video['webpage_url']
-            })
-
-    return results
+        logger.info(f"{__name__}YoutubeDL from Util initiated")
+        videos = ydl.extract_info(f"ytsearch{num_results}:{video_name}", download=download)['entries']
+        for format in videos[0]['formats']:
+            if format['format_id'] == '22' or format['format_id'] == '18':
+                '''   
+                url --> url that allows to download a file on any
+                device (auto download in pc) save to galery in android
+                '''
+                return {'download_url': format["url"], 'youtube_url': videos[0]['webpage_url']}
