@@ -22,7 +22,7 @@ def search_download_youtube_video(video_name, num_results=1,user_id=0,download=F
         for format in videos[0]['formats']:
             if format['format_id'] == '22' or format['format_id'] == '18':
                 print(f'Download Video:\n{format["url"]}')
-                return format["url"]
+                return {'download':format["url"],'youtube_url':videos[0]['webpage_url']}
                     #mycursor = mydb.cursor()
 '''                sql_query = "INSERT INTO users (user_bot_id,search_phrase,link_view,link_download) " \
                             "VALUES (%s, %s, %s, %s)"
