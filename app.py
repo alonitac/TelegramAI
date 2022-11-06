@@ -1,7 +1,7 @@
 import telebot
 from utils import search_download_youtube_video
 from loguru import logger
-
+from yt_dlp import YoutubeDL
 
 class Bot:
 
@@ -46,7 +46,11 @@ class Bot:
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
 
+
+
         # TODO save `data` as a photo in `file_info.file_path` path
+        with open(file_info.file_path, 'wb') as photo:
+            photo.write(data)
 
     def handle_message(self, message):
         """Bot Main message handler"""
@@ -61,14 +65,28 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, video_name):
+        if self.is_current_msg_photo():
+            return self.download_user_photo(quality=0)
+
+
+        """
+        This function downloads the first num_results search results from Youtube
+        :param video_name: string of the video name
+        :param num_results: integer representing how many videos to download
+        :return: list of paths to your downloaded video files
+        """
+        results = search_download_youtube_video(video_name.text)
+        self.send_text(results[0]['url'])
+
+
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = Bot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
 
 
