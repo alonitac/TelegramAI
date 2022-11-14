@@ -154,3 +154,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# My Specifics
+kraoti.txt
+.telegramToken
