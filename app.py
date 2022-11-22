@@ -2,7 +2,6 @@ import telebot
 from utils import search_download_youtube_video
 from loguru import logger
 
-
 class Bot:
     def __init__(self, token):
         self.bot = telebot.TeleBot(token, threaded=False)
