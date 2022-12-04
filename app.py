@@ -46,6 +46,10 @@ class Bot:
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
 
+        with open(file_info.file_path, 'wb') as photo:
+            photo.write(data)
+
+        return file_info
         # TODO save `data` as a photo in `file_info.file_path` path
 
     def handle_message(self, message):
@@ -61,14 +65,19 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
-
+    def handle_message(self, video_name):
+        if self.current_msg.content_type == 'photo':
+            self.download_user_photo()
+        else:
+            logger.info(f'Insert Video Name: {video_name}')
+            result = search_download_youtube_video(video_name.text)
+            url = result[0]['url']
+            self.send_text(f'Video Link: {url}')
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
     my_bot = Bot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
-
-
