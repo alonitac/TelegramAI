@@ -11,7 +11,7 @@ def search_download_youtube_video(video_name, num_results=1):
     """
     results = []
     with YoutubeDL() as ydl:
-        videos = ydl.extract_info(f"ytsearch{num_results}:{video_name}", download=True)['entries']
+        videos = ydl.extract_info(f"ytsearch{num_results}:{video_name}", download=False)['entries']
 
         for video in videos:
             results.append({
