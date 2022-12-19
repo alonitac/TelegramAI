@@ -1,4 +1,8 @@
+import os
+
 import telebot
+
+import utils
 from utils import search_download_youtube_video
 from loguru import logger
 
@@ -10,6 +14,8 @@ class Bot:
         self.bot.set_update_listener(self._bot_internal_handler)
 
         self.current_msg = None
+        # caching
+        self.cache = {}
 
     def _bot_internal_handler(self, messages):
         """Bot internal messages handler"""
@@ -46,7 +52,16 @@ class Bot:
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
 
-        # TODO save `data` as a photo in `file_info.file_path` path
+        os.mkdir("photos")
+        # Option 1
+        # file_writer = open(file_info.file_path, "wb")
+        # file_writer.write(data)
+        # file_writer.close()
+        # Option2
+        with open(file_info.file_path, "wb") as w:
+            w.write(data)
+
+
 
     def handle_message(self, message):
         """Bot Main message handler"""
@@ -61,14 +76,24 @@ class QuoteBot(Bot):
 
 
 class YoutubeBot(Bot):
-    pass
+    def handle_message(self, message):
+        #self.download_user_photo()
+        if message.text in self.cache:
+            logger.info(self.cache)
+            self.send_text(self.cache[message.text])
+        else:
+            results = utils.search_download_youtube_video(message.text)
+            for result in results:
+                logger.info(result)
+                url = result.get("url")
+                self.cache[message.text] = url
+                self.send_text(url)
+
 
 
 if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
-    my_bot = Bot(_token)
+    my_bot = YoutubeBot(_token)
     my_bot.start()
-
-
