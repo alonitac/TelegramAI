@@ -76,5 +76,9 @@ if __name__ == '__main__':
     with open('.telegramToken') as f:
         _token = f.read()
 
+<<<<<<< HEAD
     my_bot = YoutubeBot(_token)
+=======
+    my_bot = Bot(_token)
+>>>>>>> upstream/main
     my_bot.start()
