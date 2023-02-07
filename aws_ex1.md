@@ -6,7 +6,7 @@ Your goal is to provision the TelegramAI chat app as a scalable, micro-services 
 
 Here is a high level diagram of the architecture:
 
-![](img/botaws2.png)
+![](botaws2.png)
 
 ## Scaling the app
 
@@ -33,3 +33,5 @@ The repository structure is divided into services - each service under its own d
 3. `metric-sender/app.py` - The Metric Sender service calculates the `backlog_per_instance` metric and send it to CloudWatch.
 
 Each service has its own `Dockerfile` under the service's directory.
+
+![](botaws3.png)
