@@ -33,5 +33,6 @@ The repository structure is divided into services - each service under its own d
 3. `metric-sender/app.py` - The Metric Sender service calculates the `backlog_per_instance` metric and send it to CloudWatch.
 
 Each service has its own `Dockerfile` under the service's directory.
+## Diagram of the lambada architecture:
 
 ![](botaws3.png)
