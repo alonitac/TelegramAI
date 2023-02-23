@@ -5,6 +5,7 @@ from loguru import logger
 
 
 def calc_backlog_per_instance():
+    workers_queue = sqs.get_queue_by_name(QueueName=bot_to_worker_queue_name)
     msgs_in_queue = int(workers_queue.attributes.get('ApproximateNumberOfMessages'))
     asg_groups = asg_client.describe_auto_scaling_groups(AutoScalingGroupNames=[autoscaling_group_name])['AutoScalingGroups']
 
@@ -41,7 +42,6 @@ if __name__ == '__main__':
     autoscaling_group_name = config.get('autoscaling_group_name')
 
     sqs = boto3.resource('sqs')
-    workers_queue = sqs.get_queue_by_name(QueueName=bot_to_worker_queue_name)
     asg_client = boto3.client('autoscaling')
 
     main()
